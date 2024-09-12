@@ -1,14 +1,14 @@
-<x-blow::card :cols="$cols" :rows="$rows" :class="$class">
-    <x-blow::card-header
+<x-pulse::card :cols="$cols" :rows="$rows" :class="$class">
+    <x-pulse::card-header
         name="Actions"
         title="Time: {{ number_format($time) }}ms; Run at: {{ $runAt }};"
         details="past {{ $this->periodForHumans() }}"
     >
         <x-slot:icon>
-            <x-blow::icons.scale />
+            <x-pulse::icons.scale />
         </x-slot:icon>
         <x-slot:actions>
-            <x-blow::select
+            <x-pulse::select
                 wire:model.live="orderBy"
                 label="Sort by"
                 :options="[
@@ -18,50 +18,50 @@
                 @change="loading = true"
             />
         </x-slot:actions>
-    </x-blow::card-header>
+    </x-pulse::card-header>
 
-    <x-blow::scroll :expand="$expand" wire:poll.5s="">
+    <x-pulse::scroll :expand="$expand" wire:poll.5s="">
         @if ($actionsQuery->isEmpty())
-            <x-blow::no-results />
+            <x-pulse::no-results />
         @else
-            <x-blow::table.table>
+            <x-pulse::table>
                 <colgroup>
                     <col width="100%" />
                     <col width="0%" />
                     <col width="0%" />
                 </colgroup>
-                <x-blow::table.thead>
+                <x-pulse::thead>
                     <tr>
-                        <x-blow::table.th>URL</x-blow::table.th>
-                        <x-blow::table.th>User</x-blow::table.th>
-                        <x-blow::table.th class="text-right">Model</x-blow::table.th>
-                        <x-blow::table.th class="text-right">Action</x-blow::table.th>
-                        <x-blow::table.th class="text-right">Date</x-blow::table.th>
+                        <x-pulse::th>URL</x-pulse::th>
+                        <x-pulse::th>User</x-pulse::th>
+                        <x-pulse::th class="text-right">Model</x-pulse::th>
+                        <x-pulse::th class="text-right">Action</x-pulse::th>
+                        <x-pulse::th class="text-right">Date</x-pulse::th>
                     </tr>
-                </x-blow::table.thead>
+                </x-pulse::thead>
                 <tbody>
                     @foreach ($actionsQuery->take(100) as $actionQuery)
                         <tr wire:key="{{ $actionQuery->id }}-spacer" class="h-2 first:h-0"></tr>
                         <tr wire:key="{{ $actionQuery->id }}-row">
-                            <x-blow::table.td class="max-w-[1px]">
+                            <x-pulse::td class="max-w-[1px]">
                                 <code class="block text-xs text-gray-900 dark:text-gray-100 truncate" title="{{ $actionQuery->url }}">
                                     {{ $actionQuery->url }}
                                 </code>
-                            </x-blow::table.td>
-                            <x-blow::table.td numeric class="text-gray-700 dark:text-gray-100 font-bold">
+                            </x-pulse::td>
+                            <x-pulse::td numeric class="text-gray-700 dark:text-gray-100 font-bold">
                                 {{ $actionQuery->user->name ?? 'Guest User' }}
-                            </x-blow::table.td>
-                            <x-blow::table.td numeric class="text-gray-700 dark:text-gray-300 font-bold">
+                            </x-pulse::td>
+                            <x-pulse::td numeric class="text-gray-700 dark:text-gray-300 font-bold">
                                 {{ $actionQuery->model }}
-                            </x-blow::table.td>
-                            <x-blow::table.td numeric class="text-gray-700 dark:text-gray-300 font-bold">
+                            </x-pulse::td>
+                            <x-pulse::td numeric class="text-gray-700 dark:text-gray-300 font-bold">
                                 {{ $actionQuery->action }}
-                            </x-blow::table.td>
-                            <x-blow::table.td numeric class="text-gray-700 dark:text-gray-300">
+                            </x-pulse::td>
+                            <x-pulse::td numeric class="text-gray-700 dark:text-gray-300">
                                 {{ $actionQuery->timestamp }}
-                            </x-blow::table.td>
+                            </x-pulse::td>
                             {{--
-                            <x-blow::table.td numeric class="text-gray-700 dark:text-gray-300">
+                            <x-pulse::td numeric class="text-gray-700 dark:text-gray-300">
                                 <form method="post" action="{{ route('blowv3.actions-delete', $actionQuery->id) }}">
                                     @csrf
                                     @method('DELETE')
@@ -72,17 +72,17 @@
                                         </svg>
                                     </button>
                                 </form>
-                            </x-blow::table.td>
+                            </x-pulse::td>
                             --}}
                         </tr>
                     @endforeach
                 </tbody>
-            </x-blow::table.table>
+            </x-pulse::table>
         @endif
 
         @if ($actionsQuery->count() > 100)
             <div class="mt-2 text-xs text-gray-400 text-center">Limited to 100 entries</div>
         @endif
-    </x-blow::scroll>
-</x-blow::card>
+    </x-pulse::scroll>
+</x-pulse::card>
 
