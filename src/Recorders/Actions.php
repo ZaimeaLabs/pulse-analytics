@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Laravel\Pulse\Facades\Pulse;
 use Symfony\Component\HttpFoundation\Response;
-use ZaimeaLabs\Pulse\Analytics\Concerns\BootAfterResolving;
 use ZaimeaLabs\Pulse\Analytics\Constants;
+use ZaimeaLabs\Pulse\Analytics\Recorders\Concerns\BootAfterResolving;
 
 /**
  * @internal
