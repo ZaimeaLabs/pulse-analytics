@@ -68,6 +68,6 @@ class Authentications extends Card
      */
     protected function css()
     {
-        return __DIR__.'/../../dist/validation.css';
+        return __DIR__.'/../../dist/analytics.css';
     }
 }
