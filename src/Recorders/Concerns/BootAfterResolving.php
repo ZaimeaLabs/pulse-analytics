@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ZaimeaLabs\Pulse\Analytics\Concerns;
+namespace ZaimeaLabs\Pulse\Analytics\Recorders\Concerns;
 
 use Closure;
 use Illuminate\Contracts\Foundation\Application;
