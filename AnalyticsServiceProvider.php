@@ -9,7 +9,7 @@ use ZaimeaLabs\Pulse\Analytics\Livewire\Actions;
 use ZaimeaLabs\Pulse\Analytics\Livewire\Authentications;
 use ZaimeaLabs\Pulse\Analytics\Livewire\Visits;
 
-class AppsLoadServiceProvider extends ServiceProvider
+class AnalyticsServiceProvider extends ServiceProvider
 {
     /**
      * @return void
