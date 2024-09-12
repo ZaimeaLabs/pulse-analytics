@@ -46,7 +46,7 @@ class Visits
      */
     public function record(Carbon $startedAt, Request $request, Response $response): void
     {
-        $exceptPages = config('pulse.recorders.'.static::class.'.except_pages', []);
+        $exceptPages = config('pulse.recorders.'.static::class.'.ignore', []);
 
         if (empty($exceptPages) || !$this->checkIsExceptPages($request->path(), $exceptPages)) {
 

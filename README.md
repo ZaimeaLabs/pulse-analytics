@@ -23,7 +23,7 @@ Add the recorder to your `config/pulse.php` file
         ZaimeaLabs\Pulse\Analytics\Recorders\Visits::class => [
             'enabled' => env('PULSE_VISIT_ENABLED', true),
             'ajax_requests' => true, // Disable visit in Ajax mode, set it to false.
-            'except_pages' => [
+            'ignore' => [
                 'pulse',
                 'login',
                 'logout',
