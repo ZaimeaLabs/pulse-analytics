@@ -2,7 +2,7 @@ Add the recorder to your `config/pulse.php` file
 ```php
     'recorders' => [
         ZaimeaLabs\Pulse\Analytics\Recorders\Actions::class => [
-            'enabled'        => env('BLOW_ACTION_ENABLED', true), // Store when user do action.
+            'enabled'        => env('PULSE_ACTION_ENABLED', true), // Store when user do action.
             'user_model' => \App\Models\User::class, // User model.
             'on_user_delete' => true, // Authentications rows when the user is deleted.
             'on_store'       => true,
@@ -21,10 +21,10 @@ Add the recorder to your `config/pulse.php` file
         ],
 
         ZaimeaLabs\Pulse\Analytics\Recorders\Visits::class => [
-            'enabled' => env('BLOW_VISIT_ENABLED', true),
+            'enabled' => env('PULSE_VISIT_ENABLED', true),
             'ajax_requests' => true, // Disable visit in Ajax mode, set it to false.
             'except_pages' => [
-                'blow',
+                'pulse',
                 'login',
                 'logout',
                 'livewire/update',
@@ -41,7 +41,7 @@ Add the recorder to your `config/pulse.php` file
         ],
 
         ZaimeaLabs\Pulse\Analytics\Recorders\Authentications::class => [
-            'enabled' => env('BLOW_AUTHENTICATION_ENABLED', true), // Store when user login or logout.
+            'enabled' => env('PULSE_AUTHENTICATION_ENABLED', true), // Store when user login or logout.
             'on_user_delete' => true, // Authentications rows when the user is deleted.
             'user_model' => \App\Models\User::class, // User model.
             'guard' => 'web', // The correct guard.
