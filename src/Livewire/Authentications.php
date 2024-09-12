@@ -6,16 +6,16 @@ namespace ZaimeaLabs\Pulse\Analytics\Livewire;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
+use Laravel\Pulse\Livewire\Card;
 use Livewire\Attributes\Lazy;
 use Livewire\Attributes\Url;
-use ZaimeaLabs\Blow\Facades\Blow;
 use ZaimeaLabs\Blow\Models\Blow as BlowModel;
 
 /**
  * @internal
  */
 #[Lazy]
-class Authentications extends Base
+class Authentications extends Card
 {
     /**
      * Ordering.
