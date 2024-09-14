@@ -60,7 +60,7 @@ class Actions
                     crypt($request->ip(), $this->config->get('app.cipher')),
                 ], flags: JSON_THROW_ON_ERROR),
             timestamp: $startedAt->getTimestamp()
-        );
+        )->count();
     }
 
     public function created(Model $model)

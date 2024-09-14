@@ -63,7 +63,7 @@ class Authentications
                         },
                     ], flags: JSON_THROW_ON_ERROR),
                 timestamp: $timestamp,
-            );
+            )->count();
         }
     }
 }
