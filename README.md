@@ -3,7 +3,7 @@ Add the recorder to your `config/pulse.php` file
     'recorders' => [
         ZaimeaLabs\Pulse\Analytics\Recorders\Actions::class => [
             'enabled'        => env('PULSE_ACTION_ENABLED', true), // Store when user do action.
-            'user_model' => \App\Models\User::class, // User model.
+            'user_model'     => \App\Models\User::class, // User model.
             'on_user_delete' => true, // Authentications rows when the user is deleted.
             'on_store'       => true,
             'on_update'      => true,
@@ -24,11 +24,12 @@ Add the recorder to your `config/pulse.php` file
             'enabled' => env('PULSE_VISIT_ENABLED', true),
             'ajax_requests' => true, // Disable visit in Ajax mode, set it to false.
             'ignore' => [
-                'pulse',
-                'login',
-                'logout',
-                'livewire/update',
-                '_debugbar',
+                '#^/'.env('PULSE_PATH', 'pulse').'$#', // Pulse dashboard...
+                '#^/telescope#', // Telescope dashboard...
+                '#^/login#',
+                '#^/logout#',
+                '#^/livewire/update#',
+                '#^/_debugbar$',
             ],
 
             /*

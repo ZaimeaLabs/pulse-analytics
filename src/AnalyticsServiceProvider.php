@@ -8,6 +8,7 @@ use Livewire\LivewireManager;
 use ZaimeaLabs\Pulse\Analytics\Livewire\Actions;
 use ZaimeaLabs\Pulse\Analytics\Livewire\Authentications;
 use ZaimeaLabs\Pulse\Analytics\Livewire\Visits;
+use ZaimeaLabs\Pulse\Analytics\Livewire\Actions as RecordersActions;
 
 class AnalyticsServiceProvider extends ServiceProvider
 {
@@ -23,5 +24,22 @@ class AnalyticsServiceProvider extends ServiceProvider
             $livewire->component('authentications', Authentications::class);
             $livewire->component('visits', Visits::class);
         });
+
+        if (config('pulse.recorders.'.RecordersActions::class.'.enabled'))
+        {
+            $this->bootActionsObservers();
+        }
+    }
+
+    /**
+     * Register the obervers for Actions.
+     */
+    public function bootActionsObservers()
+    {
+        $obervers = config('blow.recorders.'.RecordersActions::class.'.obervers');
+
+        foreach ($obervers as $observer) {
+            $observer::observe(RecordersActions::class);
+        }
     }
 }
