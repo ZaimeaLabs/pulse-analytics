@@ -9,7 +9,7 @@ use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Http\Request;
-use Laravel\Pulse\Facades\Pulse;
+use Laravel\Pulse\Pulse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

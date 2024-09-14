@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ZaimeaLabs\Pulse\Analytics\Recorders;
 
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
@@ -12,7 +13,6 @@ use Laravel\Pulse\Concerns\ConfiguresAfterResolving;
 use Laravel\Pulse\Pulse;
 use Laravel\Pulse\Recorders\Concerns;
 use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Contracts\Config\Repository;
 use ZaimeaLabs\Pulse\Analytics\Recorders\Concerns\Agent;
 
 /**
@@ -29,7 +29,7 @@ class Visits
      */
     public function __construct(
         protected Pulse $pulse,
-        protected Repository $config
+        protected Repository $config,
     ) {
         //
     }
@@ -58,7 +58,6 @@ class Visits
      */
     public function record(Carbon $startedAt, Request $request, Response $response): void
     {
-
         if ($this->shouldIgnore($this->resolveRoutePath($request)[0])) {
             return;
         }

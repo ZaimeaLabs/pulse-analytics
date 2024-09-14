@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace ZaimeaLabs\Pulse\Analytics\Recorders;
 
-use Carbon\Carbon;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Laravel\Pulse\Facades\Pulse;
+use Illuminate\Support\Carbon;
+use Laravel\Pulse\Pulse;
 use Symfony\Component\HttpFoundation\Response;
 use ZaimeaLabs\Pulse\Analytics\Constants;
 use ZaimeaLabs\Pulse\Analytics\Recorders\Concerns\BootAfterResolving;
