@@ -22,8 +22,8 @@ use ZaimeaLabs\Pulse\Analytics\Recorders\Concerns\Agent;
 class Visits
 {
     use Ignores,
-        ConfiguresAfterResolving,
-        LivewireRoutes;
+        LivewireRoutes,
+        ConfiguresAfterResolving;
 
     /**
      * Create a new recorder instance.
@@ -38,12 +38,12 @@ class Visits
     /**
      * Register the recorder.
      */
-    public function register(callable $record, Application $app, Request $request): void
+    public function register(callable $record, Application $app): void
     {
         if ($this->config->get('pulse.recorders.'.self::class.'.enabled', false) === false) {
             return;
         }
-        if ($this->config->get('pulse.recorders.'.self::class.'.ajax_requests', false) === false && $request->ajax()) {
+        if ($this->config->get('pulse.recorders.'.self::class.'.ajax_requests', false) === false && request()->ajax()) {
             return;
         }
 
@@ -82,6 +82,6 @@ class Visits
                     $agent->getCountryByIp($request->ip()),
                 ], flags: JSON_THROW_ON_ERROR),
             timestamp: $startedAt->getTimestamp()
-        );
+        )->count();
     }
 }
