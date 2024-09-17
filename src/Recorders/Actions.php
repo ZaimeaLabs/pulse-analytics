@@ -11,14 +11,12 @@ use Illuminate\Support\Carbon;
 use Laravel\Pulse\Pulse;
 use Symfony\Component\HttpFoundation\Response;
 use ZaimeaLabs\Pulse\Analytics\Constants;
-use ZaimeaLabs\Pulse\Analytics\Recorders\Concerns\BootAfterResolving;
 
 /**
  * @internal
  */
 class Actions
 {
-    use BootAfterResolving;
 
     /**
      * The action processing.
@@ -70,7 +68,7 @@ class Actions
 
             $this->model = get_class($model);
 
-            self::call();
+            app()->call(self::record(...));
         }
     }
 
@@ -81,7 +79,7 @@ class Actions
 
             $this->model = get_class($model);
 
-            self::call();
+            app()->call(self::record(...));
         }
     }
 
@@ -92,7 +90,7 @@ class Actions
 
             $this->model = get_class($model);
 
-            self::call();
+            app()->call(self::record(...));
         }
     }
 
@@ -103,7 +101,7 @@ class Actions
 
             $this->model = get_class($model);
 
-            self::call();
+            app()->call(self::record(...));
         }
     }
 
@@ -114,7 +112,7 @@ class Actions
 
             $this->model = get_class($model);
 
-            self::call();
+            app()->call(self::record(...));
         }
     }
 }

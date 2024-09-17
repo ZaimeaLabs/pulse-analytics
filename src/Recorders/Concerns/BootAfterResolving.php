@@ -35,5 +35,4 @@ trait BootAfterResolving
             'record' => fn (...$args) => Pulse::rescue(fn () => $this->record(...$args)),
         ]);
     }
-
 }
