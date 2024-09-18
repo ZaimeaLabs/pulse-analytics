@@ -55,21 +55,16 @@ class Authentications
                 return;
             }
 
-            $visitorId = auth($guard)->id() ?? crypt(request()->ip(), $this->config->get('app.cipher'));
+            if (($userId = $this->pulse->resolveAuthenticatedUserId()) === null) {
+                return;
+            }
 
             $this->pulse->record(
                 type: match ($class) {
                     Login::class => 'login',
                     Logout::class => 'logout',
                 },
-                key: json_encode(
-                    [
-                        (string) $visitorId,
-                        match ($class) {
-                            Login::class => 'login',
-                            Logout::class => 'logout',
-                        },
-                    ], flags: JSON_THROW_ON_ERROR),
+                key: (string) $userId,
                 timestamp: $timestamp,
             )->count();
         }
