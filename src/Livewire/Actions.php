@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ZaimeaLabs\Pulse\Analytics\Livewire;
 
 use Illuminate\Contracts\Support\Renderable;

@@ -42,6 +42,7 @@ class Visits
         if ($this->config->get('pulse.recorders.'.self::class.'.enabled', false) === false) {
             return;
         }
+
         if ($this->config->get('pulse.recorders.'.self::class.'.ajax_requests', false) === false && request()->ajax()) {
             return;
         }
@@ -63,12 +64,7 @@ class Visits
         }
 
         $agent = new Agent();
-
-        $visitorId = $this->pulse->resolveAuthenticatedUserId() ?? null;
-
-        if ($visitorId === null) {
-            $visitorId = crypt($request->ip(), $this->config->get('app.cipher'));
-        }
+        $visitorId = $this->pulse->resolveAuthenticatedUserId() ?? crypt($request->ip(), $this->config->get('app.cipher'));
 
         $this->pulse->record(
             type: 'page_view',

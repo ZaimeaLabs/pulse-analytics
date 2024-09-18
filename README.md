@@ -18,6 +18,11 @@ Add the recorder to your `config/pulse.php` file
                 \App\Models\Tag::class,
                 \App\Models\User::class,
             ],
+            'ignore' => [
+                //'store',
+                '#^/login#',
+                '#^/logout#',
+            ],
         ],
 
         ZaimeaLabs\Pulse\Analytics\Recorders\Visits::class => [
@@ -46,6 +51,10 @@ Add the recorder to your `config/pulse.php` file
             'on_user_delete' => true, // Authentications rows when the user is deleted.
             'user_model' => \App\Models\User::class, // User model.
             'guard' => 'web', // The correct guard.
+            'ignore' => [
+                //'login',
+                //'logout',
+            ],
         ],
     ]
 ```

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Laravel\Pulse\Pulse;
+use Laravel\Pulse\Recorders\Concerns;
 use Symfony\Component\HttpFoundation\Response;
 use ZaimeaLabs\Pulse\Analytics\Constants;
 
@@ -17,6 +18,8 @@ use ZaimeaLabs\Pulse\Analytics\Constants;
  */
 class Actions
 {
+    use Concerns\Ignores,
+        Concerns\LivewireRoutes;
 
     /**
      * The action processing.
@@ -43,6 +46,10 @@ class Actions
      */
     public function record(Carbon $startedAt, Request $request, Response $response): void
     {
+        if ($this->shouldIgnore($this->action) || $this->shouldIgnore($this->resolveRoutePath($request)[0])) {
+            return;
+        }
+
         if (($userId = $this->pulse->resolveAuthenticatedUserId()) === null) {
             return;
         }
@@ -50,67 +57,61 @@ class Actions
         $this->pulse->record(
             type: 'user_action',
             key: json_encode(
-                [
-                    (string) $userId,
-                    $request->url(),
-                    $this->action,
-                    $this->model,
-                    crypt($request->ip(), $this->config->get('app.cipher')),
-                ], flags: JSON_THROW_ON_ERROR),
+                [(string) $userId, $request->url(), $this->action, $this->model], flags: JSON_THROW_ON_ERROR),
             timestamp: $startedAt->getTimestamp()
         )->count();
     }
 
-    public function created(Model $model)
+    public function created(Model $model): void
     {
         if ($this->config->get('pulse.recorders.'.self::class.'.on_store', false)) {
             $this->action = Constants::ACTION_STORE;
 
-            $this->model = get_class($model);
+            $this->model = get_class(object: $model);
 
             app()->call(self::record(...));
         }
     }
 
-    public function updated(Model $model)
+    public function updated(Model $model): void
     {
         if ($this->config->get('pulse.recorders.'.self::class.'.on_update', false)) {
             $this->action = Constants::ACTION_UPDATE;
 
-            $this->model = get_class($model);
+            $this->model = get_class(object: $model);
 
             app()->call(self::record(...));
         }
     }
 
-    public function deleted(Model $model)
+    public function deleted(Model $model): void
     {
         if ($this->config->get('pulse.recorders.'.self::class.'.on_destroy', false)) {
             $this->action = Constants::ACTION_DELETE;
 
-            $this->model = get_class($model);
+            $this->model = get_class(object: $model);
 
             app()->call(self::record(...));
         }
     }
 
-    public function retrived(Model $model)
+    public function retrived(Model $model): void
     {
         if ($this->config->get('pulse.recorders.'.self::class.'.on_red', false)) {
             $this->action = Constants::ACTION_READ;
 
-            $this->model = get_class($model);
+            $this->model = get_class(object: $model);
 
             app()->call(self::record(...));
         }
     }
 
-    public function replicating(Model $model)
+    public function replicating(Model $model): void
     {
         if ($this->config->get('pulse.recorders.'.self::class.'.on_replicate', false)) {
             $this->action = Constants::ACTION_REPLICATE;
 
-            $this->model = get_class($model);
+            $this->model = get_class(object: $model);
 
             app()->call(self::record(...));
         }

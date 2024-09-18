@@ -67,7 +67,7 @@ class Agent
         $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? null;
 
         foreach ($this->browserName as $key => $browser) {
-            if (str_contains($userAgent, $key)) {
+            if (str_contains(haystack: $userAgent, needle: $key)) {
                 return $browser;
             }
         }
@@ -87,7 +87,7 @@ class Agent
         $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? null;
 
         foreach ($this->deviceName as $pattern => $name) {
-            if (preg_match($pattern, $userAgent)) {
+            if (preg_match(pattern: $pattern, subject: $userAgent)) {
                 return $name;
             }
         }
@@ -98,7 +98,7 @@ class Agent
     /**
      * Get contry by ip.
      */
-    public function getCountryByIp($ip)
+    public function getCountryByIp($ip): mixed
     {
         $response = Http::get('http://ip-api.com/json/'.$ip.'?fields=country');
 

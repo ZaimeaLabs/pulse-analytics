@@ -8,15 +8,16 @@ use Carbon\CarbonImmutable;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Contracts\Config\Repository;
-use Illuminate\Http\Request;
 use Laravel\Pulse\Pulse;
-use Symfony\Component\HttpFoundation\Response;
+use Laravel\Pulse\Recorders\Concerns\Ignores;
 
 /**
  * @internal
  */
 class Authentications
 {
+    use Ignores;
+
     /**
      * The events to listen for.
      *
@@ -40,7 +41,7 @@ class Authentications
     /**
      * Record the request.
      */
-    public function record(Login|Logout $event, Request $request, Response $response): void
+    public function record(Login|Logout $event): void
     {
         [$timestamp, $class, $guard] = [
             CarbonImmutable::now()->getTimestamp(),
@@ -48,7 +49,14 @@ class Authentications
             $this->config->get('pulse.recorders.'.self::class.'.guard'),
         ];
 
-        if ($this->config->get('pulse.recorders.'.self::class.'.enabled', false)) {
+        if ($this->config->get('pulse.recorders.'.self::class.'.enabled', false))
+        {
+            if ($this->shouldIgnore(match ($class) { Login::class => 'login', Logout::class => 'logout',})){
+                return;
+            }
+
+            $visitorId = auth($guard)->id() ?? crypt(request()->ip(), $this->config->get('app.cipher'));
+
             $this->pulse->record(
                 type: match ($class) {
                     Login::class => 'login',
@@ -56,7 +64,7 @@ class Authentications
                 },
                 key: json_encode(
                     [
-                        (string) auth($guard)->id() ?? crypt($request->ip(), $this->config->get('app.cipher')),
+                        (string) $visitorId,
                         match ($class) {
                             Login::class => 'login',
                             Logout::class => 'logout',
