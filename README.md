@@ -11,11 +11,6 @@ Add the recorder to your `config/pulse.php` file
             'on_read'        => true,
             'on_replicate'   => false,
             'obervers' => [
-                \App\Models\Article::class,
-                \App\Models\Client::class,
-                \App\Models\ClientLog::class,
-                \App\Models\Like::class,
-                \App\Models\Tag::class,
                 \App\Models\User::class,
             ],
             'ignore' => [

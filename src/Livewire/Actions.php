@@ -49,7 +49,7 @@ class Actions extends Card
                 $users = Pulse::resolveUsers($counts->pluck('key'));
 
                 return $counts->map(function ($row) use ($users) {
-                    [$url, $action, $model, $visitorid] = json_decode($row->key, flags: JSON_THROW_ON_ERROR);
+                    [$userId, $url, $action, $model] = json_decode($row->key, flags: JSON_THROW_ON_ERROR);
 
                     return (object) [
                         'id' => $row->id,
@@ -57,8 +57,7 @@ class Actions extends Card
                         'url' => $url,
                         'action' => $action,
                         'model' => $model,
-                        'visitorid' => $visitorid,
-                        'user' => $users->find($row->key),
+                        'user' => $users->find($userId),
                         'count' => (int) $row->count,
                     ];
                 });
