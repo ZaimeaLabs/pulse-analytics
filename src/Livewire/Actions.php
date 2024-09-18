@@ -14,6 +14,7 @@ use Laravel\Pulse\Livewire\Concerns\RemembersQueries;
 use Livewire\Attributes\Lazy;
 use Livewire\Attributes\Url;
 use ZaimeaLabs\Pulse\Analytics\Recorders\Actions as ActionsRecorder;
+use Illuminate\Support\Arr;
 
 /**
  * @internal
@@ -45,23 +46,26 @@ class Actions extends Card
                     'count',
                     limit: 10,
                 );
+                $keys = collect($counts->pluck('key'))->map(function ($userId) {
+                    return Arr::only(json_decode($userId), '0');
+                });
 
-                $users = Pulse::resolveUsers($counts->pluck('key'));
+                $users = Pulse::resolveUsers(collect($keys->flatten()));
 
                 return $counts->map(function ($row) use ($users) {
-                    [$userId, $url, $action, $model] = json_decode($row->key, flags: JSON_THROW_ON_ERROR);
+                    [$id, $url, $action, $model] = json_decode($row->key, flags: JSON_THROW_ON_ERROR);
 
                     return (object) [
-                        'id' => $row->id,
-                        'timestamp' => $row->timestamp,
                         'url' => $url,
                         'action' => $action,
                         'model' => $model,
-                        'user' => $users->find($userId),
+                        'user' => $users->find($id),
                         'count' => (int) $row->count,
                     ];
                 });
-        });
+            },
+            $type
+        );
 
         return View::make('analytics::livewire.actions', [
             'time' => $time,
