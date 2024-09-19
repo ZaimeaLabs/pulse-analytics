@@ -34,6 +34,7 @@
                     <tr>
                         <x-pulse::th>Type</x-pulse::th>
                         <x-pulse::th>User</x-pulse::th>
+                        <x-pulse::th>Count</x-pulse::th>
                     </tr>
                 </x-pulse::thead>
                 <tbody>
@@ -47,6 +48,9 @@
                             </x-pulse::td>
                             <x-pulse::td numeric class="text-gray-700 dark:text-gray-300 font-bold">
                                 {{ $authentication->user->name ?? 'Guest User' }}
+                            </x-pulse::td>
+                            <x-pulse::td numeric class="text-gray-700 dark:text-gray-300 font-bold">
+                                {{ $authentication->count }}
                             </x-pulse::td>
                         </tr>
                     @endforeach

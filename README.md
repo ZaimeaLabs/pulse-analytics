@@ -26,6 +26,7 @@ Add the recorder to your `config/pulse.php` file
             'ignore' => [
                 '#^/'.env('PULSE_PATH', 'pulse').'$#', // Pulse dashboard...
                 '#^/telescope#', // Telescope dashboard...
+                '#^/_ignition/health-check#',
                 '#^/login#',
                 '#^/logout#',
                 '#^/livewire/update#',

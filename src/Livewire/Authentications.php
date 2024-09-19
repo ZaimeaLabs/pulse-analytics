@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ZaimeaLabs\Pulse\Analytics\Livewire;
 
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\View;
 use Laravel\Pulse\Facades\Pulse;
 use Laravel\Pulse\Livewire\Card;
@@ -37,17 +38,22 @@ class Authentications extends Card
         $type = $this->orderBy;
 
         [$authenticationsQuery, $time, $runAt] = $this->remember(
-            fn () => $this->aggregateTypes(['login', 'logout'], 'count')
-                ->map(function ($row) {
-                    $users = Pulse::resolveUsers($row->pluck('key'));
+            function () {
+                $counts = $this->aggregateTypes(
+                    ['login', 'logout'],
+                    'count',
+                );
+
+                $users = Pulse::resolveUsers($counts->pluck('key'));
+
+                return $counts->map(function ($row) use ($users) {
                     return (object) [
-                        'type' => $row->type,
+                        'type' => $row->login ? 'login' : 'logout',
                         'key' => $row->key,
                         'user' => $users->find($row->key),
                     ];
-                }),
-            'keys'
-        );
+                });
+        });
 
         return View::make('analytics::livewire.authentications', [
             'time' => $time,
