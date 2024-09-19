@@ -49,7 +49,7 @@ class Authentications extends Card
             'keys'
         );
 
-        return View::make('blow::livewire.authentications', [
+        return View::make('analytics::livewire.authentications', [
             'time' => $time,
             'runAt' => $runAt,
             'authenticationsQuery' => $authenticationsQuery,

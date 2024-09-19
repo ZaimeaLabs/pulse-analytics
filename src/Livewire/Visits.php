@@ -67,7 +67,7 @@ class Visits extends Card
             'keys'
         );
 
-        return View::make('blow::livewire.visits', [
+        return View::make('analytics::livewire.visits', [
             'time' => $time,
             'runAt' => $runAt,
             'visitsQuery' => $visits,
