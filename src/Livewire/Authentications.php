@@ -51,6 +51,7 @@ class Authentications extends Card
                         'type' => $row->login ? 'login' : 'logout',
                         'key' => $row->key,
                         'user' => $users->find($row->key),
+                        'count' => (int) $row->count,
                     ];
                 });
         });
