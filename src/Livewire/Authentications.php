@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace ZaimeaLabs\Pulse\Analytics\Livewire;
 
 use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
+use Laravel\Pulse\Facades\Pulse;
 use Laravel\Pulse\Livewire\Card;
+use Laravel\Pulse\Livewire\Concerns\HasPeriod;
+use Laravel\Pulse\Livewire\Concerns\RemembersQueries;
 use Livewire\Attributes\Lazy;
 use Livewire\Attributes\Url;
-use ZaimeaLabs\Blow\Models\Blow as BlowModel;
 
 /**
  * @internal
@@ -18,6 +19,8 @@ use ZaimeaLabs\Blow\Models\Blow as BlowModel;
 #[Lazy]
 class Authentications extends Card
 {
+    use HasPeriod, RemembersQueries;
+
     /**
      * Ordering.
      *
@@ -31,28 +34,19 @@ class Authentications extends Card
      */
     public function render(): Renderable
     {
-        $orderBy = $this->orderBy;
+        $type = $this->orderBy;
 
         [$authenticationsQuery, $time, $runAt] = $this->remember(
-            function () use ($orderBy) {
-                $counts = BlowModel::query()
-                ->whereIn('type', ['login', 'logout'])
-                ->orderBy('timestamp', $orderBy)
-                ->get();
-
-                $users = Blow::resolveUsers($counts->pluck('key'));
-
-                return $counts->map(function ($row) use ($users){
-                    [$type] = json_decode($row->value, flags: JSON_THROW_ON_ERROR);
-
+            fn () => $this->aggregateTypes(['login', 'logout'], 'count')
+                ->map(function ($row) {
+                    $users = Pulse::resolveUsers($row->pluck('key'));
                     return (object) [
-                        'id' => $row->id,
-                        'timestamp' => $row->timestamp,
-                        'type' => $type,
+                        'type' => $row->type,
+                        'key' => $row->key,
                         'user' => $users->find($row->key),
                     ];
-                });
-            }
+                }),
+            'keys'
         );
 
         return View::make('blow::livewire.authentications', [

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ZaimeaLabs\Pulse\Analytics\Livewire;
 
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\View;
 use Laravel\Pulse\Facades\Pulse;
@@ -14,7 +15,6 @@ use Laravel\Pulse\Livewire\Concerns\RemembersQueries;
 use Livewire\Attributes\Lazy;
 use Livewire\Attributes\Url;
 use ZaimeaLabs\Pulse\Analytics\Recorders\Actions as ActionsRecorder;
-use Illuminate\Support\Arr;
 
 /**
  * @internal
@@ -22,8 +22,8 @@ use Illuminate\Support\Arr;
 #[Lazy]
 class Actions extends Card
 {
-
     use HasPeriod, RemembersQueries;
+
     /**
      * Ordering.
      *
@@ -65,7 +65,7 @@ class Actions extends Card
                     ];
                 });
             },
-            $type
+            'keys'
         );
 
         return View::make('analytics::livewire.actions', [

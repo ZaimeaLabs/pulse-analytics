@@ -5,18 +5,23 @@ declare(strict_types=1);
 namespace ZaimeaLabs\Pulse\Analytics\Livewire;
 
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\View;
+use Laravel\Pulse\Facades\Pulse;
 use Laravel\Pulse\Livewire\Card;
+use Laravel\Pulse\Livewire\Concerns\HasPeriod;
+use Laravel\Pulse\Livewire\Concerns\RemembersQueries;
 use Livewire\Attributes\Lazy;
 use Livewire\Attributes\Url;
-use ZaimeaLabs\Blow\Facades\Blow;
-use ZaimeaLabs\Blow\Models\Blow as BlowModel;
+
 /**
  * @internal
  */
 #[Lazy]
 class Visits extends Card
 {
+    use HasPeriod, RemembersQueries;
+
     /**
      * Ordering.
      *
@@ -31,31 +36,35 @@ class Visits extends Card
     public function render(): Renderable
     {
         $orderBy = $this->orderBy;
-        //$test = $this->aggregate('page_view', ['sum', 'count']);
+
         [$visits, $time, $runAt] = $this->remember(
-            function () use ($orderBy) {
-                $counts = BlowModel::query()
-                ->where('type', 'page_view')
-                ->orderBy('timestamp', $orderBy)
-                ->get();
+            function () {
+                $counts = $this->aggregate(
+                    'page_view',
+                    'count',
+                    limit: 10,
+                );
+                $keys = collect($counts->pluck('key'))->map(function ($userId) {
+                    return Arr::only(json_decode($userId), '0');
+                });
 
-                $users = Blow::resolveUsers($counts->pluck('key'));
+                $users = Pulse::resolveUsers(collect($keys->flatten()));
 
-                return $counts->map(function ($row) use ($users){
-                    [$url, $browser, $platform, $visitorid, $country] = json_decode($row->value, flags: JSON_THROW_ON_ERROR);
+                return $counts->map(function ($row) use ($users) {
+                    [$id, $url, $browser, $platform, $country] = json_decode($row->key, flags: JSON_THROW_ON_ERROR);
 
                     return (object) [
-                        'id' => $row->id,
-                        'timestamp' => $row->timestamp,
+                        'key' => $row->key,
                         'url' => $url,
                         'browser' => $browser,
                         'platform' => $platform,
-                        'visitorid' => $visitorid,
                         'country' => $country,
-                        'user' => $users->find($row->key),
+                        'user' => $users->find($id),
+                        'count' => (int) $row->count,
                     ];
                 });
-            }
+            },
+            'keys'
         );
 
         return View::make('blow::livewire.visits', [
