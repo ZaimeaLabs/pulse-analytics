@@ -40,7 +40,7 @@ class Actions extends Card
         $type = $this->orderBy;
 
         [$actionsQuery, $time, $runAt] = $this->remember(
-            function () use ($type) {
+            function () {
                 $counts = $this->aggregate(
                     'user_action',
                     'count',
@@ -56,6 +56,7 @@ class Actions extends Card
                     [$id, $url, $action, $model] = json_decode($row->key, flags: JSON_THROW_ON_ERROR);
 
                     return (object) [
+                        'key' => $row->key,
                         'url' => $url,
                         'action' => $action,
                         'model' => $model,

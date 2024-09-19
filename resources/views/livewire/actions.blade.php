@@ -40,9 +40,9 @@
                     </tr>
                 </x-pulse::thead>
                 <tbody>
-                    @foreach ($actionsQuery->take(100) as $actionQuery)
-                        <tr wire:key="{{ $actionQuery->url }}-spacer" class="h-2 first:h-0"></tr>
-                        <tr wire:key="{{ $actionQuery->url }}-row">
+                    @foreach ($actionsQuery as $actionQuery)
+                        <tr wire:key="{{ $actionQuery->key }}-spacer" class="h-2 first:h-0"></tr>
+                        <tr wire:key="{{ $actionQuery->key }}-row">
                             <x-pulse::td class="max-w-[1px]">
                                 <code class="block text-xs text-gray-900 dark:text-gray-100 truncate" title="{{ $actionQuery->url }}">
                                     {{ $actionQuery->url }}
@@ -64,10 +64,6 @@
                     @endforeach
                 </tbody>
             </x-pulse::table>
-        @endif
-
-        @if ($actionsQuery->count() > 100)
-            <div class="mt-2 text-xs text-gray-400 text-center">Limited to 100 entries</div>
         @endif
     </x-pulse::scroll>
 </x-pulse::card>
