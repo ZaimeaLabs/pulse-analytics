@@ -55,7 +55,7 @@ class Authentications
                 return;
             }
 
-            if (($userId = $this->pulse->resolveAuthenticatedUserId()) === null) {
+            if (($userId = auth($guard)->id()) === null) {
                 return;
             }
 
