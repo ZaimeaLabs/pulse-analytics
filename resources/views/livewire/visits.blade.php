@@ -35,6 +35,7 @@
                         <x-pulse::th>URL</x-pulse::th>
                         <x-pulse::th>User</x-pulse::th>
                         <x-pulse::th class="text-right">OS/Browser/Country</x-pulse::th>
+                        <x-pulse::th class="text-right">Count</x-pulse::th>
                     </tr>
                 </x-pulse::thead>
                 <tbody>
@@ -51,6 +52,9 @@
                             </x-pulse::td>
                             <x-pulse::td numeric class="text-gray-700 dark:text-gray-300 font-bold">
                                 {{ $visit->platform }}/{{ $visit->browser }}/{{ $visit->country }}
+                            </x-pulse::td>
+                            <x-pulse::td numeric class="text-gray-700 dark:text-gray-300 font-bold">
+                                {{ $visit->count }}
                             </x-pulse::td>
                         </tr>
                     @endforeach

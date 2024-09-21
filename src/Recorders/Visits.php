@@ -71,7 +71,7 @@ class Visits
             key: json_encode(
                 [
                     (string) $visitorId,
-                    $request->url(),
+                    $request->path(),
                     $agent->getBrowser(),
                     $agent->getDevice(),
                     $agent->getCountryByIp($request->ip()),
