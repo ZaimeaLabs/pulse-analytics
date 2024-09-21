@@ -49,9 +49,9 @@ class Authentications extends Card
                 return $counts->map(function ($row) use ($users) {
                     return (object) [
                         'type' => $row->login ? 'login' : 'logout',
+                        'count' => $row->login ?: $row->logout ,
                         'key' => $row->key,
                         'user' => $users->find($row->key),
-                        'count' => (int) $row->count,
                     ];
                 });
         });
