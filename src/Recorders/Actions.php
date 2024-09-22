@@ -57,7 +57,12 @@ class Actions
         $this->pulse->record(
             type: 'user_action',
             key: json_encode(
-                [(string) $userId, $request->path(), $this->action, $this->model], flags: JSON_THROW_ON_ERROR),
+                [
+                    (string) $userId,
+                    $request->path(),
+                    $this->action,
+                    $this->model
+                ], flags: JSON_THROW_ON_ERROR),
             timestamp: $startedAt->getTimestamp()
         )->count();
     }

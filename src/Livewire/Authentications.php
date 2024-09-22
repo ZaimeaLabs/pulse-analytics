@@ -39,19 +39,26 @@ class Authentications extends Card
 
         [$authenticationsQuery, $time, $runAt] = $this->remember(
             function () {
-                $counts = $this->aggregateTypes(
-                    ['login', 'logout'],
+                $counts = $this->aggregate(
+                    'user_authentication',
                     'count',
+                    limit: 10,
                 );
 
-                $users = Pulse::resolveUsers($counts->pluck('key'));
+                $keys = collect($counts->pluck('key'))->map(function ($userId) {
+                    return Arr::only(json_decode($userId), '0');
+                });
+
+                $users = Pulse::resolveUsers(collect($keys->flatten()));
 
                 return $counts->map(function ($row) use ($users) {
+                    [$id, $type] = json_decode($row->key, flags: JSON_THROW_ON_ERROR);
+
                     return (object) [
-                        'type' => $row->login ? 'login' : 'logout',
-                        'count' => $row->login ?: $row->logout ,
                         'key' => $row->key,
-                        'user' => $users->find($row->key),
+                        'type' => $type,
+                        'user' => $users->find($id),
+                        'count' => (int) $row->count,
                     ];
                 });
         });

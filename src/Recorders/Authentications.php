@@ -60,11 +60,15 @@ class Authentications
             }
 
             $this->pulse->record(
-                type: match ($class) {
-                    Login::class => 'login',
-                    Logout::class => 'logout',
-                },
-                key: (string) $userId,
+                type: 'user_authentication',
+                key: json_encode(
+                    [
+                        (string) $userId,
+                        match ($class) {
+                            Login::class => 'login',
+                            Logout::class => 'logout',
+                        }
+                    ], flags: JSON_THROW_ON_ERROR),
                 timestamp: $timestamp,
             )->count();
         }

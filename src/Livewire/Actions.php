@@ -46,6 +46,7 @@ class Actions extends Card
                     'count',
                     limit: 10,
                 );
+
                 $keys = collect($counts->pluck('key'))->map(function ($userId) {
                     return Arr::only(json_decode($userId), '0');
                 });
