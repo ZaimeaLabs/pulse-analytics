@@ -3,7 +3,7 @@ Add the recorder to your `config/pulse.php` file
     'recorders' => [
         ZaimeaLabs\Pulse\Analytics\Recorders\Actions::class => [
             'enabled'        => env('PULSE_ACTION_ENABLED', true), // Store when user do action.
-            'user_model'     => \App\Models\User::class, // User model.
+            'user_model' => \App\Models\User::class, // User model.
             'on_user_delete' => true, // Authentications rows when the user is deleted.
             'on_store'       => true,
             'on_update'      => true,
@@ -11,12 +11,16 @@ Add the recorder to your `config/pulse.php` file
             'on_read'        => true,
             'on_replicate'   => false,
             'obervers' => [
+                \App\Models\Article::class,
+                \App\Models\Client::class,
+                \App\Models\ClientLog::class,
+                \App\Models\Like::class,
+                \App\Models\Tag::class,
                 \App\Models\User::class,
             ],
             'ignore' => [
-                //'store',
-                '#^/login#',
-                '#^/logout#',
+                '#^/dev/login#',
+                '#^/dev/logout#',
             ],
         ],
 
@@ -27,10 +31,11 @@ Add the recorder to your `config/pulse.php` file
                 '#^/'.env('PULSE_PATH', 'pulse').'$#', // Pulse dashboard...
                 '#^/telescope#', // Telescope dashboard...
                 '#^/_ignition/health-check#',
-                '#^/login#',
-                '#^/logout#',
+                '#^/dev/login#',
+                '#^/dev/logout#',
                 '#^/livewire/update#',
-                '#^/_debugbar$',
+                '#^/livewire/livewire.js#',
+                '#^/_debugbar#',
             ],
 
             /*
@@ -50,6 +55,13 @@ Add the recorder to your `config/pulse.php` file
             'ignore' => [
                 //'login',
                 //'logout',
+            ],
+        ],
+
+        ZaimeaLabs\Pulse\Analytics\Recorders\Campaign::class => [
+            'enabled' => env('PULSE_CAMPAIGN_ENABLED', true),
+            'catch' => [
+                '?ctm_source=Zaimea.com&ctm_campaign=advertisement',
             ],
         ],
     ]
