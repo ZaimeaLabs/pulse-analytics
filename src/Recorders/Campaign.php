@@ -53,7 +53,7 @@ class Campaign
      */
     public function record(Carbon $startedAt, Request $request, Response $response): void
     {
-        if ($this->shouldCatch($request->getRequestUri())) {
+        if ($this->shouldCatch($request->getQueryString()())) {
             return;
         }
 
@@ -64,7 +64,7 @@ class Campaign
             key: json_encode(
                 [
                     $agent->getCountryByIp($request->ip()),
-                    $request->getRequestUri(),
+                    $request->getQueryString(),
                 ], flags: JSON_THROW_ON_ERROR),
             timestamp: $startedAt->getTimestamp()
         )->count();
