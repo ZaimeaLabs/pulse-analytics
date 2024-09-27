@@ -9,6 +9,7 @@ use Illuminate\Support\ServiceProvider;
 use Livewire\LivewireManager;
 use ZaimeaLabs\Pulse\Analytics\Livewire\Actions;
 use ZaimeaLabs\Pulse\Analytics\Livewire\Authentications;
+use ZaimeaLabs\Pulse\Analytics\Livewire\Campaigns;
 use ZaimeaLabs\Pulse\Analytics\Livewire\Visits;
 use ZaimeaLabs\Pulse\Analytics\Recorders\Actions as RecordersActions;
 
@@ -24,6 +25,7 @@ class AnalyticsServiceProvider extends ServiceProvider
         $this->callAfterResolving('livewire', function (LivewireManager $livewire, Application $app) {
             $livewire->component('actions', Actions::class);
             $livewire->component('authentications', Authentications::class);
+            $livewire->component('campaigns', Campaigns::class);
             $livewire->component('visits', Visits::class);
         });
 
