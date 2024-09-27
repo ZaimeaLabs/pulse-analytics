@@ -43,7 +43,7 @@
                         <tr wire:key="{{ $campaign->key }}-row">
                             <x-pulse::td class="max-w-[1px]">
                                 <code class="block text-xs text-gray-900 dark:text-gray-100 truncate" title="{{ $campaign->campaign }}">
-                                    {{ $actionQuery->campaign }}
+                                    {{ $campaign->campaign }}
                                 </code>
                             </x-pulse::td>
                             <x-pulse::td numeric class="text-gray-700 dark:text-gray-100 font-bold">
