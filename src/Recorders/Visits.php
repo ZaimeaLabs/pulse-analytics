@@ -59,24 +59,26 @@ class Visits
      */
     public function record(Carbon $startedAt, Request $request, Response $response): void
     {
-        if ($this->shouldIgnore($this->resolveRoutePath($request)[0])) {
-            return;
-        }
+        $this->pulse->lazy(function () use ($startedAt, $request) {
+            if ($this->shouldIgnore($this->resolveRoutePath($request)[0])) {
+                return;
+            }
 
-        $agent = new Agent();
-        $visitorId = $this->pulse->resolveAuthenticatedUserId() ?? crypt($request->ip(), $this->config->get('app.cipher'));
+            $agent = new Agent();
+            $visitorId = $this->pulse->resolveAuthenticatedUserId() ?? crypt($request->ip(), $this->config->get('app.cipher'));
 
-        $this->pulse->record(
-            type: 'page_view',
-            key: json_encode(
-                [
-                    (string) $visitorId,
-                    $request->path(),
-                    $agent->getBrowser(),
-                    $agent->getDevice(),
-                    $agent->getCountryByIp($request->ip()),
-                ], flags: JSON_THROW_ON_ERROR),
-            timestamp: $startedAt->getTimestamp()
-        )->count();
+            $this->pulse->record(
+                type: 'page_view',
+                key: json_encode(
+                    [
+                        (string) $visitorId,
+                        $request->path(),
+                        $agent->getBrowser(),
+                        $agent->getDevice(),
+                        $agent->getCountryByIp($request->ip()),
+                    ], flags: JSON_THROW_ON_ERROR),
+                timestamp: $startedAt->getTimestamp()
+            )->count();
+        });
     }
 }

@@ -61,7 +61,9 @@ Add the recorder to your `config/pulse.php` file
         ZaimeaLabs\Pulse\Analytics\Recorders\Campaign::class => [
             'enabled' => env('PULSE_CAMPAIGN_ENABLED', true),
             'catch' => [
-                '^/ctm_campaign=advertisement&ctm_source=Zaimea.com/',
+                '/ctm_campaign=advertisement&ctm_source=Zaimea.com/',
+                '/ctm_campaign=advertisement&ctm_source=Custura.de/',
             ],
+        ],
     ]
 ```

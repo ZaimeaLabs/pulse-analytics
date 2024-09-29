@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ZaimeaLabs\Pulse\Analytics\Recorders;
 
+use Carbon\CarbonImmutable;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -46,25 +47,32 @@ class Actions
      */
     public function record(Carbon $startedAt, Request $request, Response $response): void
     {
-        if ($this->shouldIgnore($this->action) || $this->shouldIgnore($this->resolveRoutePath($request)[0])) {
-            return;
-        }
+        [$timestamp, $action] = [
+            $startedAt->getTimestamp(),
+            $this->action,
+        ];
 
-        if (($userId = $this->pulse->resolveAuthenticatedUserId()) === null) {
-            return;
-        }
+        $this->pulse->lazy(function () use ($timestamp, $action, $request) {
+            if ($this->shouldIgnore($action) || $this->shouldIgnore($this->resolveRoutePath($request)[0])) {
+                return;
+            }
 
-        $this->pulse->record(
-            type: 'user_action',
-            key: json_encode(
-                [
-                    (string) $userId,
-                    $request->path(),
-                    $this->action,
-                    $this->model
-                ], flags: JSON_THROW_ON_ERROR),
-            timestamp: $startedAt->getTimestamp()
-        )->count();
+            if (($userId = $this->pulse->resolveAuthenticatedUserId()) === null) {
+                return;
+            }
+
+            $this->pulse->record(
+                type: 'user_action',
+                key: json_encode(
+                    [
+                        (string) $userId,
+                        $request->path(),
+                        $this->action,
+                        $this->model
+                    ], flags: JSON_THROW_ON_ERROR),
+                timestamp: $timestamp
+            )->count();
+        });
     }
 
     public function created(Model $model): void
