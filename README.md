@@ -16,11 +16,11 @@ This card monitors and displays the following:
       - Saved: after a record has been saved (either created or updated).
       - Restoring: before a soft-deleted record is going to be restored.
       - Restored: after a soft-deleted record has been restored.
-      - Replicating: 
+      - Replicating: when a record is replicated.
       - Deleting: before a record is deleted or soft-deleted.
       - Deleted: after a record has been deleted or soft-deleted.
-      - ForceDeleting:
-      - ForceDeleted:
+      - ForceDeleting: befor a record is soft-deleted.
+      - ForceDeleted: after a record has been soft-deleted.
 
 - **Authentications:** Store when a User is logged in or out.
 
