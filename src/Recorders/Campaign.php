@@ -53,22 +53,18 @@ class Campaign
      */
     public function record(Carbon $startedAt, Request $request, Response $response): void
     {
-        $this->pulse->lazy(function () use ($startedAt, $request) {
-            if ($this->shouldCatch($request->getQueryString())) {
-                return;
-            }
+        if ($this->shouldCatch($request->getQueryString())) {
+            return;
+        }
 
-            $agent = new Agent();
-
-            $this->pulse->record(
-                type: 'ctm_campaign',
-                key: json_encode(
-                    [
-                        $agent->getCountryByIp($request->ip()),
-                        $request->getQueryString(),
-                    ], flags: JSON_THROW_ON_ERROR),
-                timestamp: $startedAt->getTimestamp()
-            )->count();
-        });
+        $this->pulse->record(
+            type: 'ctm_campaign',
+            key: json_encode(
+                [
+                    tap(new Agent(), fn ($agent) => $agent->getCountryByIp($request->ip())),
+                    $request->getQueryString(),
+                ], flags: JSON_THROW_ON_ERROR),
+            timestamp: $startedAt->getTimestamp()
+        )->count();
     }
 }
