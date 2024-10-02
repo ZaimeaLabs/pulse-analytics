@@ -15,6 +15,6 @@ trait Catches
     {
         // @phpstan-ignore argument.templateType, argument.templateType
         return collect(Config::get('pulse.recorders.'.static::class.'.catch', []))
-            ->contains(fn (string $pattern) => !preg_match($pattern, $value));
+            ->contains(fn (string $pattern) => preg_match($pattern, $value));
     }
 }

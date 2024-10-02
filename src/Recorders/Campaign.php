@@ -53,6 +53,10 @@ class Campaign
      */
     public function record(Carbon $startedAt, Request $request, Response $response): void
     {
+        if ($request->getQueryString() === null) {
+            return;
+        }
+
         if ($this->shouldCatch($request->getQueryString())) {
             return;
         }
