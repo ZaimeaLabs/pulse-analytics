@@ -61,11 +61,13 @@ class Campaign
             return;
         }
 
+        $agent = new Agent();
+
         $this->pulse->record(
             type: 'ctm_campaign',
             key: json_encode(
                 [
-                    tap(new Agent(), fn ($agent) => $agent->getCountryByIp($request->ip())),
+                    $agent->getCountryByIp($request->ip()),
                     $request->getQueryString(),
                 ], flags: JSON_THROW_ON_ERROR),
             timestamp: $startedAt->getTimestamp()
