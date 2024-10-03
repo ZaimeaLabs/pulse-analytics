@@ -1,3 +1,5 @@
+### WORK IN PROGRESS ###
+
 # Analytics cards for Laravel Pulse
 A customizable Laravel Pulse card for analytics metrics.
 
@@ -43,24 +45,25 @@ Add the recorder to your `config/pulse.php` file
     'recorders' => [
         ZaimeaLabs\Pulse\Analytics\Recorders\Actions::class => [
             'enabled'           => env('PULSE_ACTION_ENABLED', true),
-            'on_retrieved'      => true,
-            'on_creating'       => true,
+            'on_retrieved'      => false,
+            'on_creating'       => false,
             'on_created'        => true,
-            'on_updating'       => true,
+            'on_updating'       => false,
             'on_updated'        => true,
-            'on_saving'         => true,
+            'on_saving'         => false,
             'on_saved'          => true,
             'on_restoring'      => true,
             'on_restored'       => true,
             'on_replicate'      => true,
-            'on_deleting'       => true,
+            'on_deleting'       => false,
             'on_deleted'        => true,
-            'on_forceDeleting'  => true,
+            'on_forceDeleting'  => false,
             'on_forceDeleted'   => true,
             'obervers' => [
                 \App\Models\User::class,
             ],
             'ignore' => [
+                '#^/'.env('PULSE_PATH', 'pulse').'$#', // Pulse dashboard...
                 '#^/login#',
                 '#^/logout#',
             ],
@@ -72,11 +75,9 @@ Add the recorder to your `config/pulse.php` file
             'ignore' => [
                 '#^/'.env('PULSE_PATH', 'pulse').'$#', // Pulse dashboard...
                 '#^/telescope#', // Telescope dashboard...
-                '#^/_ignition/health-check#',
-                '#^/login#',
-                '#^/logout#',
-                '#^/livewire/update#',
-                '#^/livewire/livewire.js#',
+                '#^/_ignition#',
+                '#^/dev#',
+                '#^/livewire#',
                 '#^/_debugbar#',
             ],
 
