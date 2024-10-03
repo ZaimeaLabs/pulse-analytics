@@ -57,7 +57,7 @@ class Campaign
             return;
         }
 
-        if ($this->shouldCatch($request->getQueryString())) {
+        if (!$this->shouldCatch($request->getQueryString())) {
             return;
         }
 
