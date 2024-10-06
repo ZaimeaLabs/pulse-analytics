@@ -33,9 +33,10 @@ This card monitors and displays the following:
 
 
 ## Installation
+> **Note**
+> You need to have [Laravel Pulse](https://pulse.laravel.com/) installed first.
 
-First, install the package via composer:
-
+Install the package via composer by this command:
 ```sh
 composer require zaimealabs/pulse-analytics
 ```
@@ -109,18 +110,27 @@ Add the recorder to your `config/pulse.php` file
     ]
 ```
 
-Add the card to your `resources/views/vendor/pulse/dashboard.blade.php`:
+### Add components to the dashboard
+> **Note**
+> To add the card to the Pulse dashboard, you must first [publish the vendor view](https://laravel.com/docs/10.x/pulse#dashboard-customization).
 
-```blade
+```bash
+php artisan vendor:publish --tag=pulse-dashboard
+```
+
+Then, you can modify the `dashboard.blade.php` file:
+
+```diff
 <x-pulse>
-    <livewire:actions cols="6" />
++   <livewire:actions cols="6" />
 
-    <livewire:visits cols="6"/>
++   <livewire:visits cols="6"/>
 
-    <livewire:authentications cols="6" />
++   <livewire:authentications cols="6" />
 
-    <livewire:campaigns cols="6" />
++   <livewire:campaigns cols="6" />
 
-    <!-- ... -->
-</x-pulse>
+    <livewire:pulse.servers cols="full" />
+
+    <livewire:pulse.usage cols='4' rows='1' />
 ```
